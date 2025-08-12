@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Калькулятор Калорій | Фітнес Трекер</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+        /* --- Весь твій CSS зі стилями --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Roboto', sans-serif;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-light: #E8F5E9;
+            --secondary: #2196F3;
+            --accent: #FF9800;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --card-bg: #ffffff;
+            --bg: #f8f9fa;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #2c7744, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .gender-toggle {
+            display: flex;
+            background: var(--primary-light);
+            border-radius: 50px;
+            padding: 4px;
+            margin-top: 5px;
+        }
+
+        .gender-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            user-select: none;
+        }
+
+        .gender-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .slider-container {
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .slider-value {
+            position: absolute;
+            top: -32px;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #3d8b40;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 1rem;
+            color: var(--text);
+            margin-top: 5px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234CAF50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .body-type-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .body-type {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin: 0 5px;
+            user-select: none;
+        }
+
+        .body-type:hover {
+            border-color: var(--primary);
+        }
+
+        .body-type.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .body-type img {
+            width: 80px;
+            height: 120px;
+            margin-bottom: 10px;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .body-type.selected img {
+            filter: none;
+            opacity: 1;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .result-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .result-subvalue {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .bmi-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .normal {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .overweight {
+            background: #FFF8E1;
+            color: var(--warning);
+        }
+
+        .obese {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+
+        .whr-placeholder {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px dashed var(--border);
+        }
+
+        .whr-placeholder img {
+            width: 120px;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .whr-placeholder p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .goal-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .goal-btn {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid var(--border);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            user-select: none;
+        }
+
+        .goal-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .goal-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .macro-chart {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            width: 140px;
+            height: 140px;
+            position: relative;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .chart-background {
+            fill: none;
+            stroke: #f0f0f0;
+            stroke-width: 8;
+        }
+
+        .chart-progress {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 25;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .protein { stroke: #FF9800; }
+        .carbs { stroke: #4CAF50; }
+        .fats { stroke: #2196F3; }
+        .fiber { stroke: #9C27B0; }
+
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .chart-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .chart-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .macro-labels {
+            flex: 1;
+        }
+
+        .macro-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .macro-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .macro-info {
+            flex: 1;
+        }
+
+        .macro-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .macro-amount {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .note-box {
+            background: #E3F2FD;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+        }
+
+        .note-box i {
+            color: var(--secondary);
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .body-type img {
+                width: 60px;
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .macro-chart {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .body-type-selector {
+                flex-wrap: wrap;
+            }
+            
+            .body-type {
+                flex-basis: calc(50% - 10px);
+                margin-bottom: 10px;
+            }
+            
+            .goal-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <h1>Калькулятор Калорій</h1>
+            </div>
+            <p class="subtitle">
+              Розрахуйте свою добову потребу в калоріях та розподіл макроелементів на основі ваших показників та цілей фітнесу
+            </p>
+        </header>
+
+        <div class="dashboard">
+            <!-- Панель введення даних -->
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-user-edit"></i> Введіть свої дані</h2>
+
+                <!-- Стать -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-venus-mars"></i> Стать</label>
+                    <div class="gender-toggle" id="genderToggle">
+                        <button class="gender-btn active" data-gender="female">Жінка</button>
+                        <button class="gender-btn" data-gender="male">Чоловік</button>
+                    </div>
+                </div>
+
+                <!-- Рік народження -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-birthday-cake"></i> Рік народження</label>
+                    <div class="slider-container">
+                        <div class="slider-value" id="birthYearValue">1990</div>
+                        <input type="range" min="1950" max="2010" value="1990" class="slider" id="birthYearSlider" />
+                    </div>
+                </div>
+
+                <!-- Зріст -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-ruler-vertical"></i> Зріст (см)</label>
+                    <div class="slider-container">
+                        <div class="slider-value" id="heightValue">170 см</div>
+                        <input type="range" min="140" max="210" value="170" class="slider" id="heightSlider" />
+                    </div>
+                </div>
+
+                <!-- Вага -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-weight-scale"></i> Вага (кг)</label>
+                    <div class="slider-container">
+                        <div class="slider-value" id="weightValue">68 кг</div>
+                        <input type="range" min="40" max="150" value="68" class="slider" id="weightSlider" />
+                    </div>
+                </div>
+
+                <!-- Рівень активності -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-person-running"></i> Рівень активності</label>
+                    <select id="activityLevel">
+                        <option value="1.2">Сидячий (мало або взагалі без вправ)</option>
+                        <option value="1.375">Легкий (вправи 1-3 дні/тиждень)</option>
+                        <option value="1.55" selected>Помірний (вправи 3-5 днів/тиждень)</option>
+                        <option value="1.725">Високий (вправи 6-7 днів/тиждень)</option>
+                        <option value="1.9">Дуже високий (інтенсивні вправи щодня)</option>
+                    </select>
+                </div>
+
+                <!-- Відсоток жиру -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-percentage"></i> Відсоток жиру в організмі</label>
+                    <div class="slider-container">
+                        <div class="slider-value" id="bodyFatValue">24%</div>
+                        <input type="range" min="5" max="50" value="24" class="slider" id="bodyFatSlider" />
+                    </div>
+                </div>
+
+                <!-- Тип тіла -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-body"></i> Тип тіла</label>
+                    <div class="body-type-selector" id="bodyTypeSelector">
+                        <div class="body-type selected" data-type="mesomorph">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 80 120'%3E%3Crect fill='%23f0f0f0' width='80' height='120' rx='10'/%3E%3Ccircle fill='%234CAF50' cx='40' cy='30' r='15'/%3E%3Cpath fill='%234CAF50' d='M35,42 L30,90 L50,90 L45,42 Z'/%3E%3C/svg%3E" alt="Мезоморф" />
+                            <div>Мезоморф</div>
+                        </div>
+                        <div class="body-type" data-type="ectomorph">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 80 120'%3E%3Crect fill='%23f0f0f0' width='80' height='120' rx='10'/%3E%3Ccircle fill='%23ddd' cx='40' cy='30' r='12'/%3E%3Cpath fill='%23ddd' d='M40,42 L30,90 L50,90 Z'/%3E%3C/svg%3E" alt="Ектоморф" />
+                            <div>Ектоморф</div>
+                        </div>
+                        <div class="body-type" data-type="endomorph">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 80 120'%3E%3Crect fill='%23f0f0f0' width='80' height='120' rx='10'/%3E%3Ccircle fill='%23ddd' cx='40' cy='30' r='18'/%3E%3Cpath fill='%23ddd' d='M40,48 L25,90 L55,90 Z'/%3E%3C/svg%3E" alt="Ендоморф" />
+                            <div>Ендоморф</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" style="
+                    margin-top: 25px;
+                    padding: 14px;
+                    width: 100%;
+                    font-weight: 600;
+                    background: var(--primary);
+                    color: white;
+                    border: none;
+                    border-radius: var(--radius);
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    transition: background 0.3s ease;
+                ">Розрахувати</button>
+            </div>
+
+            <!-- Панель результатів -->
+            <div class="panel" id="resultsPanel" style="display:none;">
+                <h2 class="panel-title"><i class="fas fa-chart-line"></i> Ваші результати</h2>
+
+                <div class="result-card">
+                    <div class="result-title"><i class="fas fa-fire"></i> Основний обмін речовин (BMR)</div>
+                    <div class="result-value" id="bmrValue">- ккал</div>
+                    <div class="result-subvalue" id="bmrKjValue">- кДж</div>
+                    <p class="result-description">Калорії, необхідні вашому організму в стані спокою</p>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-title"><i class="fas fa-weight-scale"></i> Індекс маси тіла (BMI)</div>
+                    <div class="result-value" id="bmiValue">-</div>
+                    <div class="bmi-status" id="bmiStatus">-</div>
+                    <p class="result-description">Здоровий діапазон: 18.5 - 24.9</p>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-title"><i class="fas fa-utensils"></i> Рекомендована добова кількість калорій</div>
+                    <div class="result-value" id="caloriesValue">- ккал</div>
+                    <div class="result-subvalue" id="caloriesKjValue">- кДж</div>
+                    <p class="result-description">Для досягнення мети за 12 тижнів</p>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-title"><i class="fas fa-chart-pie"></i> Розподіл макроелементів</div>
+                    <div class="macro-chart">
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 36 36">
+                                <circle class="chart-background" r="16" cx="18" cy="18"></circle>
+                                <circle class="chart-progress protein" r="16" cx="18" cy="18" stroke-dashoffset="25"></circle>
+                                <circle class="chart-progress carbs" r="16" cx="18" cy="18" stroke-dashoffset="50"></circle>
+                                <circle class="chart-progress fats" r="16" cx="18" cy="18" stroke-dashoffset="75"></circle>
+                                <circle class="chart-progress fiber" r="16" cx="18" cy="18" stroke-dashoffset="100"></circle>
+                            </svg>
+                            <div class="chart-center">
+                                <div class="chart-value" id="macroTotal">100%</div>
+                                <div class="chart-label">Всього</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-labels">
+                            <div class="macro-item">
+                                <div class="macro-color" style="background-color: #FF9800;"></div>
+                                <div class="macro-info">
+                                    <div class="macro-name">Білки</div>
+                                    <div class="macro-amount" id="proteinAmount">- г (-%)</div>
+                                </div>
+                            </div>
+                            <div class="macro-item">
+                                <div class="macro-color" style="background-color: #4CAF50;"></div>
+                                <div class="macro-info">
+                                    <div class="macro-name">Вуглеводи</div>
+                                    <div class="macro-amount" id="carbsAmount">- г (-%)</div>
+                                </div>
+                            </div>
+                            <div class="macro-item">
+                                <div class="macro-color" style="background-color: #2196F3;"></div>
+                                <div class="macro-info">
+                                    <div class="macro-name">Жири</div>
+                                    <div class="macro-amount" id="fatsAmount">- г (-%)</div>
+                                </div>
+                            </div>
+                            <div class="macro-item">
+                                <div class="macro-color" style="background-color: #9C27B0;"></div>
+                                <div class="macro-info">
+                                    <div class="macro-name">Клітковина</div>
+                                    <div class="macro-amount" id="fiberAmount">35 г</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note-box">
+                    <i class="fas fa-clipboard-list"></i> Занотовуйте свої прийоми їжі, щоб відстежувати калорії та досягати своїх цілей
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Калькулятор Калорій | Розроблено для вашої фітнес подорожі</p>
+        </footer>
+    </div>
+
+<script>
+    // Інтерактивність для інтерфейсу та базові розрахунки на клієнті
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Перемикач статі
+        const genderBtns = document.querySelectorAll('.gender-btn');
+        let gender = 'female';
+        genderBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                genderBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                gender = btn.dataset.gender;
+            });
+        });
+
+        // Слайдери та відображення значень
+        const birthYearSlider = document.getElementById('birthYearSlider');
+        const birthYearValue = document.getElementById('birthYearValue');
+        birthYearValue.textContent = birthYearSlider.value;
+        birthYearSlider.addEventListener('input', () => {
+            birthYearValue.textContent = birthYearSlider.value;
+        });
+
+        const heightSlider = document.getElementById('heightSlider');
+        const heightValue = document.getElementById('heightValue');
+        heightValue.textContent = heightSlider.value + ' см';
+        heightSlider.addEventListener('input', () => {
+            heightValue.textContent = heightSlider.value + ' см';
+        });
+
+        const weightSlider = document.getElementById('weightSlider');
+        const weightValue = document.getElementById('weightValue');
+        weightValue.textContent = weightSlider.value + ' кг';
+        weightSlider.addEventListener('input', () => {
+            weightValue.textContent = weightSlider.value + ' кг';
+        });
+
+        const bodyFatSlider = document.getElementById('bodyFatSlider');
+        const bodyFatValue = document.getElementById('bodyFatValue');
+        bodyFatValue.textContent = bodyFatSlider.value + '%';
+        bodyFatSlider.addEventListener('input', () => {
+            bodyFatValue.textContent = bodyFatSlider.value + '%';
+        });
+
+        // Вибір типу тіла
+        const bodyTypes = document.querySelectorAll('.body-type');
+        let bodyType = 'mesomorph';
+        bodyTypes.forEach(type => {
+            type.addEventListener('click', () => {
+                bodyTypes.forEach(t => t.classList.remove('selected'));
+                type.classList.add('selected');
+                bodyType = type.dataset.type;
+            });
+        });
+
+        // Вибір рівня активності
+        const activityLevelSelect = document.getElementById('activityLevel');
+
+        // Вибір мети (поки в UI нема, якщо буде - додавай)
+
+        // Кнопка розрахунку
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultsPanel = document.getElementById('resultsPanel');
+
+        // Результати
+        const bmrValue = document.getElementById('bmrValue');
+        const bmrKjValue = document.getElementById('bmrKjValue');
+        const bmiValue = document.getElementById('bmiValue');
+        const bmiStatus = document.getElementById('bmiStatus');
+        const caloriesValue = document.getElementById('caloriesValue');
+        const caloriesKjValue = document.getElementById('caloriesKjValue');
+        const proteinAmount = document.getElementById('proteinAmount');
+        const carbsAmount = document.getElementById('carbsAmount');
+        const fatsAmount = document.getElementById('fatsAmount');
+        const fiberAmount = document.getElementById('fiberAmount');
+
+        function calculateBMR(weight, height, age, gender) {
+            // Формула Харріса-Бенедикта
+            if (gender === 'male') {
+                return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+        }
+
+        function calculateBMI(weight, height) {
+            // Вага у кг, зріст у см -> BMI
+            return weight / ((height / 100) ** 2);
+        }
+
+        function bmiCategory(bmi) {
+            if (bmi < 18.5) return {text: 'Недостатня вага', className: 'warning'};
+            if (bmi < 25) return {text: 'Нормальна вага', className: 'normal'};
+            if (bmi < 30) return {text: 'Надмірна вага', className: 'overweight'};
+            return {text: 'Ожиріння', className: 'obese'};
+        }
+
+        function toKJ(calories) {
+            return (calories * 4.184).toFixed(0);
+        }
+
+        function calculateMacros(calories) {
+            // У відсотках за замовчуванням для мети набору м’язової маси
+            // білки 30%, вуглеводи 45%, жири 25%, клітковина - фіксовано 35г
+            const proteinPercent = 30;
+            const carbsPercent = 45;
+            const fatsPercent = 25;
+            const fiberGrams = 35;
+
+            // 1 г білків = 4 ккал, вуглеводів = 4 ккал, жирів = 9 ккал
+            const proteinGrams = ((calories * proteinPercent / 100) / 4).toFixed(0);
+            const carbsGrams = ((calories * carbsPercent / 100) / 4).toFixed(0);
+            const fatsGrams = ((calories * fatsPercent / 100) / 9).toFixed(0);
+
+            return {
+                protein: {grams: proteinGrams, percent: proteinPercent},
+                carbs: {grams: carbsGrams, percent: carbsPercent},
+                fats: {grams: fatsGrams, percent: fatsPercent},
+                fiber: fiberGrams
+            };
+        }
+
+        calculateBtn.addEventListener('click', () => {
+            const weight = +weightSlider.value;
+            const height = +heightSlider.value;
+            const age = new Date().getFullYear() - +birthYearSlider.value;
+            const activity = +activityLevelSelect.value;
+
+            // Розрахунок BMR
+            let bmr = calculateBMR(weight, height, age, gender);
+            let totalCalories = bmr * activity;
+
+            // BMI
+            let bmi = calculateBMI(weight, height);
+            let bmiCat = bmiCategory(bmi);
+
+            // Макроси
+            let macros = calculateMacros(totalCalories);
+
+            // Показати панель результатів
+            resultsPanel.style.display = 'flex';
+
+            // Відображення результатів
+            bmrValue.textContent = Math.round(bmr) + ' ккал';
+            bmrKjValue.textContent = toKJ(bmr) + ' кДж';
+            bmiValue.textContent = bmi.toFixed(1);
+            bmiStatus.textContent = bmiCat.text;
+            bmiStatus.className = 'bmi-status ' + bmiCat.className;
+            caloriesValue.textContent = Math.round(totalCalories) + ' ккал';
+            caloriesKjValue.textContent = toKJ(totalCalories) + ' кДж';
+
+            proteinAmount.textContent = `${macros.protein.grams} г (${macros.protein.percent}%)`;
+            carbsAmount.textContent = `${macros.carbs.grams} г (${macros.carbs.percent}%)`;
+            fatsAmount.textContent = `${macros.fats.grams} г (${macros.fats.percent}%)`;
+            fiberAmount.textContent = `${macros.fiber} г`;
+        });
+    });
+</script>
+</body>
+</html>
